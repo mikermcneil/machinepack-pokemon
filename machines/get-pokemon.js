@@ -33,7 +33,8 @@ module.exports = {
       description: 'Done.',
       example: {
         name: 'Bulbasaur',
-        types: ['poison', 'grass']
+        types: ['poison', 'grass'],
+        imageUrl: 'http://pokeapi.co/api/v1/sprite/1/media/img/1383395659.12.png'
       }
     },
 
@@ -58,18 +59,51 @@ module.exports = {
       success: function(result) {
 
         var pokemon;
+        var spriteId;
         try {
           var parsedResponse = JSON.parse(result.body);
           pokemon = {
             name: parsedResponse.name,
             types: _.pluck(parsedResponse.types, 'name')
           };
+          // Ensure that a sprite id exists
+          if (!parsedResponse.sprites[0] || !_.isObject(parsedResponse.sprites[0])) {
+            return exits.error(new Error('No sprite URL available for this pokemon.'));
+          }
+          spriteId = +(parsedResponse.sprites[0].resource_uri.match(/sprite\/([0-9]+)/)[1]);
         }
         catch (e) {
           return exits.error(e);
         }
 
-        return exits.success(pokemon);
+        // Fetch the primary image url for this pokemon
+        // using the 'sprites' that were provided.
+        Http.sendHttpRequest({
+          url: '/sprite/' + spriteId,
+          baseUrl: 'http://pokeapi.co/api/v1'
+        }).exec({
+          // An unexpected error occurred.
+          error: function(err) {
+            return exits.error(err);
+          },
+          // OK.
+          success: function(result) {
+            try {
+              var parsedSpriteResponse = JSON.parse(result.body);
+              // Note that we strip the leading slash, and ensure that one exists.
+              var spriteImageUrl = 'http://pokeapi.co/' + parsedSpriteResponse.image.replace(/^\//, '');
+
+              // Now set the pokemon imageUrl using the relevant info from the
+              // parsed sprite response.
+              pokemon.imageUrl = spriteImageUrl;
+            }
+            catch (e) {
+              return exits.error(e);
+            }
+
+            return exits.success(pokemon);
+          }
+        });
       },
     });
   },

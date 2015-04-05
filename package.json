@@ -27,6 +27,7 @@
       "list-all-pokemon",
       "get-pokemon"
     ],
+    "iconSrc": "http://www.jwforcier.com/wp-content/uploads/2014/04/pokeballs.png",
     "testsUrl": "https://travis-ci.org/mikermcneil/machinepack-pokemon"
   },
   "repository": {

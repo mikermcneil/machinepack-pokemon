@@ -1,6 +1,6 @@
 {
   "name": "machinepack-pokemon",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fetch data about Pokémon, their moves, abilities, types, egg groups and much much more.",
   "scripts": {
     "test": "node ./node_modules/test-machinepack-mocha/bin/testmachinepack-mocha.js"

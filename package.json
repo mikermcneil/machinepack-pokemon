@@ -12,7 +12,7 @@
   ],
   "author": "",
   "license": "MIT",
-  "dependencies":{
+  "dependencies": {
     "machine": "^3.0.0"
   },
   "devDependencies": {
@@ -21,6 +21,11 @@
   "machinepack": {
     "friendlyName": "Pokemon",
     "machineDir": "machines/",
-    "machines": []
+    "machines": [],
+    "testsUrl": "https://travis-ci.org/mikermcneil/machinepack-pokemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mikermcneil/machinepack-pokemon.git"
   }
 }

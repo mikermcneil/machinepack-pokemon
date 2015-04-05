@@ -34,6 +34,7 @@ module.exports = {
       example: {
         name: 'Bulbasaur',
         types: ['poison', 'grass'],
+        description: 'It has a seed planted in its back or something',
         imageUrl: 'http://pokeapi.co/api/v1/sprite/1/media/img/1383395659.12.png'
       }
     },
@@ -60,17 +61,26 @@ module.exports = {
 
         var pokemon;
         var spriteId;
+        var descriptionId;
         try {
           var parsedResponse = JSON.parse(result.body);
+          // console.log(parsedResponse);
           pokemon = {
             name: parsedResponse.name,
             types: _.pluck(parsedResponse.types, 'name')
           };
           // Ensure that a sprite id exists
           if (!parsedResponse.sprites[0] || !_.isObject(parsedResponse.sprites[0])) {
-            return exits.error(new Error('No sprite URL available for this pokemon.'));
+            return exits.error(new Error('No image available for this pokemon.'));
           }
           spriteId = +(parsedResponse.sprites[0].resource_uri.match(/sprite\/([0-9]+)/)[1]);
+
+          // Ensure that a primary description id exists and parse it out
+          if (!parsedResponse.descriptions[0] || !_.isObject(parsedResponse.descriptions[0])) {
+            return exits.error(new Error('No description available for this pokemon.'));
+          }
+          descriptionId = +(parsedResponse.descriptions[0].resource_uri.match(/description\/([0-9]+)/)[1]);
+
         }
         catch (e) {
           return exits.error(e);
@@ -101,7 +111,29 @@ module.exports = {
               return exits.error(e);
             }
 
-            return exits.success(pokemon);
+            // Fetch the primary description for this pokemon.
+            Http.sendHttpRequest({
+              url: '/description/' + descriptionId,
+              baseUrl: 'http://pokeapi.co/api/v1'
+            }).exec({
+              error: function (err){
+                return exits.error(err);
+              },
+              success: function (result){
+                try {
+                  var parsedDescriptionResponse = JSON.parse(result.body);
+
+                  // Now set the pokemon description using the relevant info from the
+                  // parsed description response.
+                  pokemon.description = parsedDescriptionResponse.description;
+                }
+                catch (e) {
+                  return exits.error(e);
+                }
+
+                return exits.success(pokemon);
+              },
+            });
           }
         });
       },

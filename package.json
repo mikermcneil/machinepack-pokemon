@@ -14,7 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "machine": "^3.0.0",
-    "machinepack-http": "^2.0.1"
+    "machinepack-http": "^2.0.1",
+    "lodash": "^3.6.0"
   },
   "devDependencies": {
     "test-machinepack-mocha": "^0.2.2"
@@ -23,7 +24,8 @@
     "friendlyName": "Pokemon",
     "machineDir": "machines/",
     "machines": [
-      "list-all-pokemon"
+      "list-all-pokemon",
+      "get-pokemon"
     ],
     "testsUrl": "https://travis-ci.org/mikermcneil/machinepack-pokemon"
   },

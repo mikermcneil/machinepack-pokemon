@@ -1,20 +1,22 @@
 module.exports = {
 
 
-  friendlyName: 'List all Pokemon',
+  friendlyName: 'Get Pokemon',
 
 
-  description: 'List the name and resource_uri for each known Pokemon.',
+  description: 'Get information about a Pokemon based on its unique ID number',
 
 
   extendedDescription: '',
 
 
-  moreInfoUrl: 'http://pokeapi.co/docs/#pokedex',
-
-
   inputs: {
 
+    id: {
+      description: 'The unique id for a Pokemon',
+      example: 1,
+      required: true
+    }
   },
 
 
@@ -29,12 +31,10 @@ module.exports = {
 
     success: {
       description: 'Done.',
-      example: [
-        {
-          name: 'charmander',
-          resource_uri: 'api/v1/pokemon/4/'
-        }
-      ]
+      example: {
+        name: 'Bulbasaur',
+        types: ['poison', 'grass']
+      }
     },
 
   },
@@ -42,11 +42,12 @@ module.exports = {
 
   fn: function (inputs,exits) {
 
+    var _ = require('lodash');
     var Http = require('machinepack-http');
 
     // Send an HTTP request and receive the response.
     Http.sendHttpRequest({
-      url: '/pokedex/1',
+      url: '/pokemon/'+inputs.id,
       baseUrl: 'http://pokeapi.co/api/v1'
     }).exec({
       // An unexpected error occurred.
@@ -56,19 +57,21 @@ module.exports = {
       // OK.
       success: function(result) {
 
-        var pokemons;
+        var pokemon;
         try {
           var parsedResponse = JSON.parse(result.body);
-          pokemons = parsedResponse.pokemon;
+          pokemon = {
+            name: parsedResponse.name,
+            types: _.pluck(parsedResponse.types, 'name')
+          };
         }
         catch (e) {
           return exits.error(e);
         }
 
-        return exits.success(pokemons);
+        return exits.success(pokemon);
       },
     });
-
   },
 
 

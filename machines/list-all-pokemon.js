@@ -31,8 +31,8 @@ module.exports = {
       description: 'Done.',
       example: [
         {
+          id: 4,
           name: 'charmander',
-          resource_uri: 'api/v1/pokemon/4/'
         }
       ]
     },
@@ -42,6 +42,7 @@ module.exports = {
 
   fn: function (inputs,exits) {
 
+    var _ = require('lodash');
     var Http = require('machinepack-http');
 
     // Send an HTTP request and receive the response.
@@ -59,7 +60,12 @@ module.exports = {
         var pokemons;
         try {
           var parsedResponse = JSON.parse(result.body);
-          pokemons = parsedResponse.pokemon;
+          pokemons = _.map(parsedResponse.pokemon, function (aPokemon){
+            // Derive the pokemon's id from the resource_uri
+            // (that way it can be used in the `get-pokemon` machine)
+            aPokemon.id = +(aPokemon.resource_uri.match(/pokemon\/([0-9]+)/)[1]);
+            return aPokemon;
+          });
         }
         catch (e) {
           return exits.error(e);

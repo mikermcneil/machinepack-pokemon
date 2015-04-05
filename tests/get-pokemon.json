@@ -1,0 +1,65 @@
+{
+  "machine": "get-pokemon",
+  "expectations": [
+    {
+      "todo": true,
+      "using": {},
+      "outcome": "success"
+    },
+    {
+      "using": {
+        "id": "151"
+      },
+      "outcome": "success",
+      "returns": {
+        "name": "Mew",
+        "types": [
+          "psychic"
+        ],
+        "imageUrl": "http://pokeapi.co/media/img/151.png"
+      }
+    },
+    {
+      "using": {
+        "id": "1"
+      },
+      "outcome": "success",
+      "returns": {
+        "name": "Bulbasaur",
+        "types": [
+          "poison",
+          "grass"
+        ],
+        "imageUrl": "http://pokeapi.co/media/img/1.png"
+      }
+    },
+    {
+      "using": {
+        "id": "2"
+      },
+      "outcome": "success",
+      "returns": {
+        "name": "Ivysaur",
+        "types": [
+          "poison",
+          "grass"
+        ],
+        "imageUrl": "http://pokeapi.co/media/img/2.png"
+      }
+    },
+    {
+      "using": {
+        "id": "3"
+      },
+      "outcome": "success",
+      "returns": {
+        "name": "Venusaur",
+        "types": [
+          "poison",
+          "grass"
+        ],
+        "imageUrl": "http://pokeapi.co/media/img/3.png"
+      }
+    }
+  ]
+}

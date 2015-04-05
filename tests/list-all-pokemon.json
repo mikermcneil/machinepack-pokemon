@@ -1,0 +1,10 @@
+{
+  "machine": "list-all-pokemon",
+  "expectations": [
+    {
+      "todo": true,
+      "using": {},
+      "outcome": "success"
+    }
+  ]
+}

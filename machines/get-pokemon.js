@@ -33,9 +33,13 @@ module.exports = {
       description: 'Done.',
       example: {
         name: 'Bulbasaur',
-        types: ['poison', 'grass'],
         description: 'It has a seed planted in its back or something',
-        imageUrl: 'http://pokeapi.co/api/v1/sprite/1/media/img/1383395659.12.png'
+        imageUrl: 'http://pokeapi.co/api/v1/sprite/1/media/img/1383395659.12.png',
+        types: ['poison', 'grass'],
+        moves: [{
+          name: 'Tackle',
+          level: 1
+        }]
       }
     },
 
@@ -67,7 +71,8 @@ module.exports = {
           // console.log(parsedResponse);
           pokemon = {
             name: parsedResponse.name,
-            types: _.pluck(parsedResponse.types, 'name')
+            types: _.pluck(parsedResponse.types, 'name'),
+            moves: _.sortBy(_.where(parsedResponse.moves, {learn_type: 'level up'}), 'level')
           };
           // Ensure that a sprite id exists
           if (!parsedResponse.sprites[0] || !_.isObject(parsedResponse.sprites[0])) {
